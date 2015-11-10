@@ -25,26 +25,30 @@ print(stapp)
  plot(stappes3$steps, type = "l", color = "magenta", xlab= "day", ylab=
        "sumsteps")
  ```
- 
-*Alternatively, histogram can be constructed as follows*
-    
-```{r, fig.width=7, fig.height=5,echo=TRUE}
-hist(stapp[,2],xlab="Sum steps per day", type ="1", col="red", main = "sum steps per day")
-```
-*Calculate average  steps by day*
+ *Calculate average  steps by day*
     
 ##Average daily activity pattern
     
-stappes1 <- aggregate(stappes$steps,
-by =  list(stapp$date), FUN = mean)
+stappes1 <- aggregate(stappdf$steps,
+by =  list(stappdf$date), FUN = mean)
 names(stappes1) <- c("date", "meansteps")
 print(stappes1)
-      
+     
+     
+##Calculate median of the number of steps takeb per day 
+
+stappes4 <- aggregate(stappdf$steps,
+by =  list(stappdf$date), FUN = median)
+names(stappes4) <- c("date", "median of steps per day")
+print(stappes4)
+
+##Plotting the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days
+
 ```{r qplot, fig.width=7, fig.height=7, ECHO=TRUE)}
 library (ggplot2)
-qqplot(stappes$interval, stappes$steps,xlab = "mean interval per 
-day", ylab="mean steps per day", color= "wheat",  type = "1",  main    = "Five-minute interval by  steps", geom  = c("point","smooth"), 
-method ="lm")
+qplot(stappdf$interval, stappdf$steps,xlab = "mean interval per 
+day", ylab="mean steps per day", color= "wheat",  type = "1",  main = "Five-minute interval by  steps",
+geom  = c("point","smooth"), method ="lm")
 ```
 
 *The interval that has the largest number of steps occurs on  2012-10-06* 
