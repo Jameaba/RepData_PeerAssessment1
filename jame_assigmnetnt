@@ -1,6 +1,6 @@
 
 
- #An Analysis of Data on Activity 
+_ #An Analysis of Data on Activity_ 
     
  **Reading data into R Studio**
     
@@ -162,8 +162,8 @@ library(ggplot2)
 qplot(interval, steps, data = stapp_1, main = "steps on weekends", geom =   
 c("line", "smooth"),   color = "red",  xlab ="interval", ylab 
  ="steps by weekday/weekend", method ="lm")
- qplot(interval, steps, data = stapp_2, main = "steps on weekends", geom =   
- c("line", "smooth"),  color = "magenta"  xlab = "interval", method ="lm")
+ qplot(interval, steps, data = stapp_2, main = "steps on weekdays", geom =   
+ c("line", "smooth"),  color = "magenta",  method ="lm")
  
 ##*Conclusion*
 *There is apparently a marked difference in the pattern of activity on weekdays and weekends. On weekdays actvity is very intensive  
