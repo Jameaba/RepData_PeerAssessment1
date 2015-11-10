@@ -7,29 +7,25 @@
 ```{r, echo=TRUE}
  stappes = read.table("activity.csv", header = T, sep =",")
  stappdf = data.frame(stappes)
+ summary(stappdf)
 ```
-*A summary of variables in the activity dataset*
-```{r, echo=TRUE}
-summary(stappdf)
 
-**Total number of steps taken per day and naming the categorized       variables**
+**Total number of steps taken per day and naming the categorized   variables**
     
 ```{r, echo=TRUE}
 stapp <- aggregate.data.frame(stappes$steps,
-by = list(stappes$date), FUN = sum)
-names(stapp) <- c("sumsteps", "date", "interval")
+by = list(stappdf$date), FUN = sum)
+names(stapp) <- c("date", "sumsteps")
 print(stapp)
 ```
 
 **Make a histogram of the total number of steps taken each day**
     
 ```{r, echo=TRUE}
-library(ggplot2)
-hist.ggplot <- ggplot(stapp, aes(x = x,color="blues9"))
-g.his <- hist.ggplot +
-geom_histogram()
-print(g.his)
+ plot(stappes3$steps, type = "l", color = "magenta", xlab= "day", ylab=
+       "sumsteps")
  ```
+ 
 *Alternatively, histogram can be constructed as follows*
     
 ```{r, fig.width=7, fig.height=5,echo=TRUE}
