@@ -19,7 +19,7 @@
     stappes = read.table("activity.csv", header = T, sep =",")
     ```
 
-    *Creating a dataframe of the activity dataset*
+*Creating a dataframe of the activity dataset*
     
     ```{r, echo=TRUE}
     stappdf = data.frame(stappes)
