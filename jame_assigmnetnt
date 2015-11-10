@@ -95,7 +95,7 @@ print(stappes_ma_filled)
     
  ```{r qplot,fig.width=7, fig.height=5, echo=TRUE}
 library(ggplot2)
-hist.ggplot <- ggplot(stappes_ma_filled, aes(x = stappes.steps,color="wheat"))
+hist.ggplot <- ggplot(stappes_ma_filled, aes(x = stappdf.steps,color="wheat"))
 g.his <- hist.ggplot +geom_histogram()
 print(g.his)
 ```
@@ -111,41 +111,39 @@ summary(stappes_ma_filled)
 *The effect of filling in inmissing values with means seems to enhance smoothness of the   distribution*.
 
 ```{r, echo =TRUE}
-stappdf1 = data.frame(stappdf)
-df = transform(stappdf1, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
-df1 =transform(stappdf1, interval = ifelse(is.na(interval),         
+stappdf2 = data.frame(stappdf)
+df = transform(stappdf2, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
+df1 =transform(stappdf2, interval = ifelse(is.na(interval),         
 mean(interval, na.rm=TRUE), interval)) 
 ```
 *Graphically*
 ```{r qplot,  fig.width=7, fig.height=5, echo=TRUE}
-qplot(interval, stepp1, data = stappdf1, color= "orange",  type ="1",  main = " five-minute interval by  steps", geom  =                 c("point","smooth"),  method ="lm")
- ```
-##Activity patterns on weekends and weekdays
+library(ggplot2)
+qplot(interval, steps, data = df1, main = " Five_minute interval     by  steps", geom  =  c("line","smooth"),  method ="lm")
 
  *Converting dates into weekends and weekdays*
-    
-```{r, ECHO=TRUE}
-mydates <- as.Date(stappeplete$stappes.date)
-mydadates1 <-weekdays(mydates)
-```
+ ##Activity patterns on weekends and weekdays
+
+*Converting dates into weekends and weekdays*
+
+ ```{r, echo=TRUE}
+ mydates <- as.Date(df1$date)
+ mydadates1 <-weekdays(mydates)
+    ```
 *creating 'differentiators', the two levels and labels*
     
  ```{r, echo=TRUE}
- mydates2<- c("Monday",  "Tuesday",  "Wednesday",  "Thursday", "Friday")
+ mydates2<- c("Monday", "Tuesday", "Wednesday", "Thursday","Friday")
+    
  mydates3 <- factor((weekdays(mydates) %in% mydates2), 
-levels=c(FALSE, TRUE),  labels  =  c("Weekend", "weekday"))
-```
-*Creation of dataframe with a new factor variable*
-   
+ levels=c(FALSE, TRUE), labels = c("Weekend",  "weekday"))
+    ```
+  *Creation of dataframe with a new factor variable*
     
-```{r, echo = TRUE}
-stappeplete1<-data.frame(stappeplete, mydate4$date_by_day)
-names(stappeplete1) <- c("steps", "date", "interval", "day_week")
-```
-*Making things abit neater* 
-    
-```{r, echo=TRUE}
-stapt <- data.frame(stappeplete1)
+  ```{r, echo = TRUE}
+  df3<-data.frame(df1, mydates3)
+  names(df3)<- c("steps",  "date",  "interval",   
+ "day_week")
  ```
 *Creating subsets of weekend days and weekday days*
     
