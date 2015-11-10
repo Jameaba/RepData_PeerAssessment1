@@ -148,17 +148,23 @@ qplot(interval, steps, data = df1, main = " Five_minute interval     by  steps",
 *Creating subsets of weekend days and weekday days*
     
 ```{r, echo= TRUE}
-(stapt2 <- stapt[stapt$day_week == "weekend", ])
-(stapt3 <- stapt[stapt$day_week == "weekday", ])
-```
+(stapp_1 <- df3[df3$day_week == "weekend", ])
+    
+(stapp_2 <- df3[df$day_week == "weekday", ])
+    ```
+
 
 # Plot intervals by weekends and weekdays
 
 ```{r, fig.width=7, fig.height=5, echo=TRUE}
 par(mfrow = c (2,2))
-plot(stapt2$interval, stapt2$steps,type="l", color = "blue", xlab      ="Interval",  ylab ="Steps on weekends")
-plot(stapt3$interval, stapt3$steps, type="l",color="blue", xlab     = "Interval", ylab="Steps on weekdays")
-```
+library(ggplot2)
+qplot(interval, steps, data = stapp_1, main = "steps on weekends", geom =   
+c("line", "smooth"),   color = "red",  xlab ="interval", ylab 
+ ="steps by weekday/weekend", method ="lm")
+ qplot(interval, steps, data = stapp_2, main = "steps on weekends", geom =   
+ c("line", "smooth"),  color = "magenta"  xlab = "interval", method ="lm")
+ 
 ##*Conclusion*
 *There is apparently a marked difference in the pattern of activity on weekdays and weekends. On weekdays actvity is very intensive  
 during early mmorning, peaks somewhat quickly and starts to fall  off, albeit with intermitent spurts along the way. For the weekends 
