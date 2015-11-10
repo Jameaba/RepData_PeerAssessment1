@@ -51,40 +51,43 @@ day", ylab="mean steps per day", color= "wheat",  type = "1",  main = "Five-minu
 geom  = c("point","smooth"), method ="lm")
 ```
 
-*The interval that has the largest number of steps occurs on  2012-10-06* 
+*The interval that has the largest number of steps occurs on  700th (between 500-800) 
     
 #Imputing missing values
     
 *Calculating total number of missing values*
     
 ```{r, echo=TRUE}
- stappes_msvas=sapply(stapp, function(x) sum(is.na(x)))
+ stappes_msvas=sapply(stappdf, function(x) sum(is.na(x)))
  stappes_msvas
   ```
 Reported number of  mssing values is **2304** for steps variable 
+No missing values are reported for the data and interval variables
+
 #Filling in the missing values using the mean
 
 
 ```{r,echo=TRUE}
-stappes$steps[is.na(stappes$steps)]
- mean(stappes$steps, na.rm = TRUE)
-stappes$steps[is.na(stappes$steps)] <- mean(stappes$steps,             na.rm = TRUE)
-stappes$steps
+stappdf$steps[is.na(stappdf$steps)]
+ mean(stappdf$steps, na.rm = TRUE)
+stappdf$steps[is.na(stappdf$steps)] <- mean(stappdf$steps,    na.rm = TRUE)
+stappdf$steps
 ```
 
 *Missing values for interval*
     
 ```{r, echo=TRUE}
-stappes$interval[is.na(stappes$interval)]
-median(stappes$interval, na.rm = TRUE)
-stappes$interval[is.na(stappes$interval)]<- median(stappes$interval, na.rm = TRUE)
-stappes$interval
-```
+stappdf$interval[is.na(stappdf$interval)]
+median(stappdf$interval, na.rm = TRUE)
+stappdf$interval[is.na(stappdfinterval)]<-                             
+median(stappdf$interval, na.rm = TRUE)
+stappdf$interval
+ ```
  # data frame with MAs steps and interval variables filled
 
 ```{r, echo=TRUE}
-stappes_ma_filled <- data.frame(stappes$steps, stappes$date,stappes$interval)
-print(stappes_ma_filled
+stappes_ma_filled <- data.frame(stappdf$steps, stappdf$date,stappdf$interval)
+print(stappes_ma_filled)
 ```
 
 *Histogram of the steps taken by day with MA filled*
@@ -100,15 +103,17 @@ print(g.his)
 **Mean of steps is 37.38; median is 0** [unchanged]
 
 ```{r, echo=TRUE}
+stappes_ma_filled <- data.frame(stappdf$steps, stappdf$date,  stappdf$interval)        
+print(stappes_ma_filled) 
 summary(stappes_ma_filled) 
 ```
 
-*The effect of filling in inmissing values with means seems toenhance smoothness of the   distribution*.
+*The effect of filling in inmissing values with means seems to enhance smoothness of the   distribution*.
 
 ```{r, echo =TRUE}
-stappdf = data.frame(stappes)
-df = transform(stappdf, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
-df1 =transform(stappdf, interval = ifelse(is.na(interval),         
+stappdf1 = data.frame(stappdf)
+df = transform(stappdf1, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
+df1 =transform(stappdf1, interval = ifelse(is.na(interval),         
 mean(interval, na.rm=TRUE), interval)) 
 ```
 *Graphically*
