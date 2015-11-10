@@ -17,7 +17,7 @@ summary(stappdf)
 ```{r, echo=TRUE}
 stapp <- aggregate.data.frame(stappes$steps,
 by = list(stappes$date), FUN = sum)
-names(stapp) <- c("steps", "date", "sumsteps")
+names(stapp) <- c("sumsteps", "date", "interval")
 print(stapp)
 ```
 
@@ -33,7 +33,7 @@ print(g.his)
 *Alternatively, histogram can be constructed as follows*
     
 ```{r, fig.width=7, fig.height=5,echo=TRUE}
-hist(stapp[,2],xlab="Sum steps per day", type ="1", col             ="red", main = "sum steps per day")
+hist(stapp[,2],xlab="Sum steps per day", type ="1", col="red", main = "sum steps per day")
 ```
 *Calculate average  steps by day*
     
@@ -77,13 +77,13 @@ stappes$steps
 ```{r, echo=TRUE}
 stappes$interval[is.na(stappes$interval)]
 median(stappes$interval, na.rm = TRUE)
-stappes$interval[is.na(stappes$interval)]<-                             median(stappes$interval, na.rm = TRUE)
+stappes$interval[is.na(stappes$interval)]<- median(stappes$interval, na.rm = TRUE)
 stappes$interval
 ```
  # data frame with MAs steps and interval variables filled
 
 ```{r, echo=TRUE}
-stappes_ma_filled <- data.frame(stappes$steps, stappes$date,           stappes$interval)
+stappes_ma_filled <- data.frame(stappes$steps, stappes$date,stappes$interval)
 print(stappes_ma_filled
 ```
 
@@ -92,8 +92,7 @@ print(stappes_ma_filled
     
  ```{r qplot,fig.width=7, fig.height=5, echo=TRUE}
 library(ggplot2)
-hist.ggplot <- ggplot(stappes_ma_filled, aes(x =    
-stappes.steps,color="wheat"))
+hist.ggplot <- ggplot(stappes_ma_filled, aes(x = stappes.steps,color="wheat"))
 g.his <- hist.ggplot +geom_histogram()
 print(g.his)
 ```
@@ -104,17 +103,17 @@ print(g.his)
 summary(stappes_ma_filled) 
 ```
 
-*The effect of filling in inmissing values with means seems to          enhance smoothness of the   distribution*.
+*The effect of filling in inmissing values with means seems toenhance smoothness of the   distribution*.
 
 ```{r, echo =TRUE}
 stappdf = data.frame(stappes)
-df = transform(stappdf, steps = ifelse(is.na(steps), mean(steps,       na.rm=TRUE), steps))
+df = transform(stappdf, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
 df1 =transform(stappdf, interval = ifelse(is.na(interval),         
 mean(interval, na.rm=TRUE), interval)) 
 ```
 *Graphically*
 ```{r qplot,  fig.width=7, fig.height=5, echo=TRUE}
-qplot(interval, stepp1, data = stappdf1, color= "orange",  type =     "1",  main = " five-minute interval by  steps", geom  =                 c("point","smooth"),  method ="lm")
+qplot(interval, stepp1, data = stappdf1, color= "orange",  type ="1",  main = " five-minute interval by  steps", geom  =                 c("point","smooth"),  method ="lm")
  ```
 ##Activity patterns on weekends and weekdays
 
@@ -127,7 +126,7 @@ mydadates1 <-weekdays(mydates)
 *creating 'differentiators', the two levels and labels*
     
  ```{r, echo=TRUE}
- mydates2<- c("Monday",  "Tuesday",  "Wednesday",  "Thursday",          "Friday")
+ mydates2<- c("Monday",  "Tuesday",  "Wednesday",  "Thursday", "Friday")
  mydates3 <- factor((weekdays(mydates) %in% mydates2), 
 levels=c(FALSE, TRUE),  labels  =  c("Weekend", "weekday"))
 ```
