@@ -1,184 +1,185 @@
 
-    #An Analysis of Data on Activity 
-    
-    **Reading data into R Studio**
-    
-    ```{r, echo=TRUE}
-    stappes = read.table("activity.csv", header = T, sep =",")
-    stappdf = data.frame(stappes)
-    stappdf1 <- na.omit(stappdf)
-    ```
-    *A summary of variables in the activity dataset*
-    
-    ```{r, echo=TRUE}
-    summary(stappes)
-    ```
-    ##Reading file into R Studio
 
-    ```{r, echo= TRUE}
-    stappes = read.table("activity.csv", header = T, sep =",")
-    ```
+ #An Analysis of Data on Activity 
+    
+ **Reading data into R Studio**
+    
+ ```{r, echo=TRUE}
+ stappes = read.table("activity.csv", header = T, sep =",")
+ stappdf = data.frame(stappes)
+ stappdf1 <- na.omit(stappdf)
+```
+*A summary of variables in the activity dataset*
+```{r, echo=TRUE}
+summary(stappes)
+ ```
+##Reading file into R Studio
 
-*Creating a dataframe of the activity dataset*
-    
-    ```{r, echo=TRUE}
-    stappdf = data.frame(stappes)
-    ```
+```{r, echo= TRUE}
+stappes = read.table("activity.csv", header = T, sep =",")
+ ```
 
-    **Total number of steps taken per day and naming the categorized variables**
+ *Creating a dataframe of the activity dataset*
     
-    ```{r, echo=TRUE}
-    stappes2 <- aggregate.data.frame(stappes$steps,
-    by = list(stappes$date), FUN = sum)
-    names(stappes) <- c("date", "sumsteps")
-    ```
+```{r, echo=TRUE}
+stappdf = data.frame(stappes)
+```
 
-    **Make a histogram of the total number of steps taken each day**
+**Total number of steps taken per day and naming the categorized       variables**
     
-    ```{r, echo=TRUE, fig.width=7, fig.height=5, echo=TRUE}
-    windows()
-    hist(stappes2$steps) 
-    ```
-    *Alternatively, histogram can be constructed as follows*
-    
-    ```{r, fig.width=7, fig.height=5,echo=TRUE}
-    hist(stappes2$steps,xlab="Sum steps per day", type ="1", col  ="red", main = "sum steps per day")
-    ```
-    *Calculate average  steps by day*
-    
-    ##Average daily activity pattern
-    
-    stappes1 <- aggregate(stappes$steps,
-    by =  list(stappes$date), FUN = mean)
-    names(stappes1) <- c("date", "meansteps")
-    print(stappes1)
-     
-     ```{r qplot, fig.width=7, fig.height=7, echo=TRUE}
-    windows()
-    library (ggplot2)
-    qplot(stappes$interval, stappes$steps,xlab ="mean interval per day", ylab= "mean steps per day", color= "wheat",  type = "1",      main = "Five-minute interval by  steps",  geom = point",   
-    "smooth", method =  "lm" )
-    ```
+```{r, echo=TRUE}
+stappes2 <- aggregate.data.frame(stappes$steps,
+by = list(stappes$date), FUN = sum)
+names(stappes) <- c("date", "sumsteps")
+print(stappes)
+```
 
-    *The interval that has the largest number of steps occurs on 2012-10-06* 
+**Make a histogram of the total number of steps taken each day**
     
-    #Imputing missing values
+```{r, echo=TRUE}
+library(ggplot2)
+hist.ggplot <- ggplot(stappes2, aes(x = x,color="blues9"))
+g.his <- hist.ggplot +
+geom_histogram()
+print(g.his)
+ ```
+*Alternatively, histogram can be constructed as follows*
     
-    *Calculating total number of missing values*
+```{r, fig.width=7, fig.height=5,echo=TRUE}
+hist(stappes2[,2],xlab="Sum steps per day", type ="1", col             ="red", main = "sum steps per day")
+```
+*Calculate average  steps by day*
     
+##Average daily activity pattern
     
-    ```{r, echo=TRUE}
-    stappes_msvas=sapply(stappes, function(x) sum(is.na(x)))
-    stappes_msvas
-    ```
-    Reported number of  mssing values is **2304** for steps variable 
-    #Filling in the missing values using the mean
+stappes1 <- aggregate(stappes$steps,
+by =  list(stappes$date), FUN = mean)
+names(stappes1) <- c("date", "meansteps")
+print(stappes1)
+      
+```{r qplot, fig.width=7, fig.height=7, ECHO=TRUE)}
+library (ggplot2)
+qqplot(stappes$interval, stappes$steps,xlab = "mean interval per 
+day", ylab="mean steps per day", color= "wheat",  type = "1",  main     = "Five-minute interval by  steps", geom  = c("point","smooth"), 
+method ="lm")
+```
+
+*The interval that has the largest number of steps occurs on            2012-10-06* 
+    
+#Imputing missing values
+    
+*Calculating total number of missing values*
+    
+```{r, echo=TRUE}
+ stappes_msvas=sapply(stappes, function(x) sum(is.na(x)))
+ stappes_msvas
+  ```
+Reported number of  mssing values is **2304** for steps variable 
+#Filling in the missing values using the mean
 
 
-    ```{r,echo=TRUE}
-    stappes$steps[is.na(stappes$steps)]
-    mean(stappes$steps, na.rm = TRUE)
-    stappes$steps[is.na(stappes$steps)] <- mean(stappes$steps, na.rm = TRUE)
-    stat<-data.frame(stappes$steps)
-    ```
+```{r,echo=TRUE}
+stappes$steps[is.na(stappes$steps)]
+ mean(stappes$steps, na.rm = TRUE)
+stappes$steps[is.na(stappes$steps)] <- mean(stappes$steps,             na.rm = TRUE)
+stappes$steps
+```
 
-    *Missing values for interval*
+*Missing values for interval*
     
-    ```{r, echo=TRUE}
-    stappes$interval[is.na(stappes$interval)]
-    median(stappes$interval, na.rm = TRUE)
-    stappes$interval[is.na(stappes$interval)]<- median(stappes$interval, na.rm = TRUE)
-    stappes$interval
-    ```
+```{r, echo=TRUE}
+stappes$interval[is.na(stappes$interval)]
+median(stappes$interval, na.rm = TRUE)
+stappes$interval[is.na(stappes$interval)]<-                             median(stappes$interval, na.rm = TRUE)
+stappes$interval
+```
+ # data frame with MAs steps and interval variables filled
 
-    # data frame with MAs steps and interval variables filled
+```{r, echo=TRUE}
+stappes_ma_filled <- data.frame(stappes$steps, stappes$date,           stappes$interval)
+print(stappes_ma_filled
+```
 
-    ```{r, echo=TRUE}
-    stappes_ma_filled <- data.frame(stappes$steps, stappes$date,           stappes$interval)
-    print(stappes_ma_filled)
-    ```
+*Histogram of the steps taken by day with MA filled*
+    
+    
+ ```{r qplot,fig.width=7, fig.height=5, echo=TRUE}
+library(ggplot2)
+hist.ggplot <- ggplot(stappes_ma_filled, aes(x =    
+stappes.steps,color="wheat"))
+g.his <- hist.ggplot +geom_histogram()
+print(g.his)
+```
+*The mean and medium of total steps by day
+**Mean of steps is 37.38; median is 0** [unchanged]
 
-    *Histogram of the steps taken by day with MA filled*
-    
-    ```{r plot,fig.width=7, fig.height=5, echo=TRUE}
-    windows())
-    hist(stappes_ma_filled$stappes.steps)
-    ```
+```{r, echo=TRUE}
+summary(stappes_ma_filled) 
+```
 
-    *The mean and medium of total steps by day
-    **Mean of steps is 37.38; median is 0** [unchanged]
+*The effect of filling in inmissing values with means seems to          enhance smoothness of the   distribution*.
 
-    ```{r, echo=TRUE}
-    summary(stappes_ma_filled) 
-    ```
-    *The effect of filling in inmissing values with means seems to          enhance smoothness of the   distribution*.
+```{r, echo =TRUE}
+stappdf = data.frame(stappes)
+df = transform(stappdf, steps = ifelse(is.na(steps), mean(steps,       na.rm=TRUE), steps))
+df1 =transform(stappdf, interval = ifelse(is.na(interval),         
+mean(interval, na.rm=TRUE), interval)) 
+```
+*Graphically*
+```{r qplot,  fig.width=7, fig.height=5, echo=TRUE}
+qplot(interval, stepp1, data = stappdf1, color= "orange",  type =     "1",  main = " five-minute interval by  steps", geom  =                 c("point","smooth"),  method ="lm")
+ ```
+##Activity patterns on weekends and weekdays
 
-    ```{r, echo =TRUE}
-    stappdf = data.frame(stappes)
-    df = transform(stappdf, steps = ifelse(is.na(steps), mean(steps,       na.rm=TRUE), steps))
-    df1 =transform(stappdf, interval = ifelse(is.na(interval),         
-    mean(interval, na.rm=TRUE), interval)) 
-    ```
-    *Graphically*
+ *Converting dates into weekends and weekdays*
     
-    ```{r qplot,  fig.width=7, fig.height=5, echo=TRUE}
-    Wndows()
-    library(ggplot2)
-    qplot(interval, stepp1, data = stap, main = " Five_minute interval     by  steps", geom  =  c("point","smooth"),  method ="lm")
-    ```
-    ##Activity patterns on weekends and weekdays
+```{r, ECHO=TRUE}
+mydates <- as.Date(stappeplete$stappes.date)
+mydadates1 <-weekdays(mydates)
+```
+*creating 'differentiators', the two levels and labels*
+    
+ ```{r, echo=TRUE}
+ mydates2<- c("Monday",  "Tuesday",  "Wednesday",  "Thursday",          "Friday")
+ mydates3 <- factor((weekdays(mydates) %in% mydates2), 
+levels=c(FALSE, TRUE),  labels  =  c("Weekend", "weekday"))
+```
+*Creation of dataframe with a new factor variable*
+   
+    
+```{r, echo = TRUE}
+stappeplete1<-data.frame(stappeplete, mydate4$date_by_day)
+names(stappeplete1) <- c("steps", "date", "interval", "day_week")
+```
+*Making things abit neater* 
+    
+```{r, echo=TRUE}
+stapt <- data.frame(stappeplete1)
+ ```
+*Creating subsets of weekend days and weekday days*
+    
+```{r, echo= TRUE}
+(stapt2 <- stapt[stapt$day_week == "weekend", ])
+(stapt3 <- stapt[stapt$day_week == "weekday", ])
+```
 
-    *Converting dates into weekends and weekdays*
-    
-    ```{r, echo=TRUE}
-    mydates <- as.Date(stappeplete$stappes.date)
-    mydadates1 <-weekdays(mydates)
-    ```
-    *creating 'differentiators', the two levels and labels*
-    
-    ```{r, echo=TRUE}
-    mydates2<- c("Monday", "Tuesday", "Wednesday", "Thursday","Friday")
-    
-    mydates3 <- factor((weekdays(mydates) %in% mydates2), 
-    levels=c(FALSE, TRUE), labels = c("Weekend",  "weekday"))
-    ```
-    *Creation of dataframe with a new factor variable*
-    
-    
-    ```{r, echo = TRUE}
-    stappeplete1<-data.frame(stappeplete, mydate4$date_by_day)
-    names(stappeplete1) <- c("steps",  "date",  "interval",   
-    "day_week")
-    ```
-    *Making things abit* 
-    
-    ```{r, echo=TRUE}
-    stapt <- data.frame(stappeplete1)
-    ```
-    *Creating subsets of weekend days and weekday days*
-    
-    ```{r, echo= TRUE}
-    
-    (stapt2 <- stapt[stapt$day_week == "weekend", ])
-    
-    (stapt3 <- stapt[stapt$day_week == "weekday", ])
-    ```
+# Plot intervals by weekends and weekdays
 
-    # Plot intervals by weekends and weekdays
-
-    ```{r, fig.width=7, fig.height=5, echo=TRUE}
-    windows()
-    par(mfrow = c (2,2))
-    plot(stapt2$interval, stapt2$steps,type="l", xlab   ="Interval", ylab ="Steps on weekends", col = "blue")
-    plot(stapt3$interval, stapt3$steps, type="l", xlab  = "Interval",  ylab="Steps on weekdays", col ="magenta" )
-    ```
-    *There is apparently a marked difference in the pattern of activity on weekdays and weekends. On weekdays actvity is very intensive  
-    during early mmorning, peaks somewhat quickly and starts to fall off, albeit with intermitent spurts along the way. For the weekends
-    activity seems intense during later hours. It is also important to  note that the concentration of pockets of time of intense activity
-    seems to occur more in batches with respect to weekends than on   weekdays. Another important difference between the two categories 
-    lies in the high concentration of activity (more compact) compared with somewhat slightly paced activity on weekends.
-    On weekdays and weekends. On weekdays activity is very intensive during early morning, peaks somewhat quickly and starts to fall
-    off, albeit with intermitent spurts along the way. For the weekends activity seems intense during later hours. It is also important to   
-    note that the concentration of pockets of time of intense activity  seems to occur more in batches with respect to weekends than on  
-    weekdays. Another important difference between the two categories lies in the high concentration of activity (more compact) compared 
-    with somewhat slightly paced activity on weekends.*
+```{r, fig.width=7, fig.height=5, echo=TRUE}
+par(mfrow = c (2,2))
+plot(stapt2$interval, stapt2$steps,type="l", color = "blue", xlab      ="Interval",  ylab ="Steps on weekends")
+plot(stapt3$interval, stapt3$steps, type="l",color="blue", xlab     = "Interval", ylab="Steps on weekdays")
+```
+##*Conclusion*
+*There is apparently a marked difference in the pattern of activity on weekdays and weekends. On weekdays actvity is very intensive  
+during early mmorning, peaks somewhat quickly and starts to fall  off, albeit with intermitent spurts along the way. For the weekends 
+activity seems intense during later hours. It is also important to    note that the concentration of pockets of time of intense activity
+seems to occur more in batches with respect to weekends than on   weekdays. Another important difference between the two categories 
+lies in the high concentration of activity (more compact) compared   with somewhat slightly paced activity on weekends.
+On weekdays and weekends. On weekdays actvity is very intensive during early morning, peaks somewhat quickly and starts to fall
+off, albeit with intermitent spurts along the way. For the weekends   activity seems intense during later hours. It is also important to 
+note that the concentration of pockets of time of intense activity  seems to occur more in batches with respect to weekends than on  
+weekdays. Another important difference between the two categories  lies in the high concentration of activity (more compact) compared 
+with somewhat slightly paced activity on weekends.*
+    
+    
