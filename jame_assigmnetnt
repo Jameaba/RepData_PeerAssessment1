@@ -1,5 +1,4 @@
 
-
 _ #An Analysis of Data on Activity_ 
     
  **Reading data into R Studio**
@@ -25,6 +24,7 @@ print(stapp)
  plot(stappes3$steps, type = "l", color = "magenta", xlab= "day", ylab=
        "sumsteps")
  ```
+ 
  *Calculate average  steps by day*
     
 ##Average daily activity pattern
