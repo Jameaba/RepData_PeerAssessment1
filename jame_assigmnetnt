@@ -1,0 +1,182 @@
+
+_ #An Analysis of Data on Activity_ 
+    
+ **Reading data into R Studio**
+    
+```{r, echo=TRUE}
+ stappes = read.table("activity.csv", header = T, sep =",")
+ stappdf = data.frame(stappes)
+ summary(stappdf)
+```
+
+**Total number of steps taken per day and naming the categorized   variables**
+    
+```{r, echo=TRUE}
+stapp <- aggregate.data.frame(stappes$steps,
+by = list(stappdf$date), FUN = sum)
+names(stapp) <- c("date", "sumsteps")
+print(stapp)
+```
+
+**Make a histogram of the total number of steps taken each day**
+    
+```{r, echo=TRUE}
+ plot(stappes3$steps, type = "l", color = "magenta", xlab= "day", ylab=
+       "sumsteps")
+ ```
+ 
+ *Calculate average  steps by day*
+    
+##Average daily activity pattern
+    
+stappes1 <- aggregate(stappdf$steps,
+by =  list(stappdf$date), FUN = mean)
+names(stappes1) <- c("date", "meansteps")
+print(stappes1)
+     
+     
+##Calculate median of the number of steps takeb per day 
+
+stappes4 <- aggregate(stappdf$steps,
+by =  list(stappdf$date), FUN = median)
+names(stappes4) <- c("date", "median of steps per day")
+print(stappes4)
+
+##Plotting the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days
+
+```{r qplot, fig.width=7, fig.height=7, ECHO=TRUE)}
+library (ggplot2)
+qplot(stappdf$interval, stappdf$steps,xlab = "mean interval per 
+day", ylab="mean steps per day", color= "wheat",  type = "1",  main = "Five-minute interval by  steps",
+geom  = c("point","smooth"), method ="lm")
+```
+
+*The interval that has the largest number of steps occurs on  700th (between 500-800) 
+    
+#Imputing missing values
+    
+*Calculating total number of missing values*
+    
+```{r, echo=TRUE}
+ stappes_msvas=sapply(stappdf, function(x) sum(is.na(x)))
+ stappes_msvas
+  ```
+Reported number of  mssing values is **2304** for steps variable 
+No missing values are reported for the data and interval variables
+
+#Filling in the missing values using the mean
+
+
+```{r,echo=TRUE}
+stappdf$steps[is.na(stappdf$steps)]
+ mean(stappdf$steps, na.rm = TRUE)
+stappdf$steps[is.na(stappdf$steps)] <- mean(stappdf$steps,    na.rm = TRUE)
+stappdf$steps
+```
+
+*Missing values for interval*
+    
+```{r, echo=TRUE}
+stappdf$interval[is.na(stappdf$interval)]
+median(stappdf$interval, na.rm = TRUE)
+stappdf$interval[is.na(stappdfinterval)]<-                             
+median(stappdf$interval, na.rm = TRUE)
+stappdf$interval
+ ```
+ # data frame with MAs steps and interval variables filled
+
+```{r, echo=TRUE}
+stappes_ma_filled <- data.frame(stappdf$steps, stappdf$date,stappdf$interval)
+print(stappes_ma_filled)
+```
+
+*Histogram of the steps taken by day with MA filled*
+    
+    
+ ```{r qplot,fig.width=7, fig.height=5, echo=TRUE}
+library(ggplot2)
+hist.ggplot <- ggplot(stappes_ma_filled, aes(x = stappdf.steps,color="wheat"))
+g.his <- hist.ggplot +geom_histogram()
+print(g.his)
+```
+*The mean and medium of total steps by day
+**Mean of steps is 37.38; median is 0** [unchanged]
+
+```{r, echo=TRUE}
+stappes_ma_filled <- data.frame(stappdf$steps, stappdf$date,  stappdf$interval)        
+print(stappes_ma_filled) 
+summary(stappes_ma_filled) 
+```
+
+*The effect of filling in inmissing values with means seems to enhance smoothness of the   distribution*.
+
+```{r, echo =TRUE}
+stappdf2 = data.frame(stappdf)
+df = transform(stappdf2, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
+df1 =transform(stappdf2, interval = ifelse(is.na(interval),         
+mean(interval, na.rm=TRUE), interval)) 
+```
+*Graphically*
+```{r qplot,  fig.width=7, fig.height=5, echo=TRUE}
+library(ggplot2)
+qplot(interval, steps, data = df1, main = " Five_minute interval     by  steps", geom  =  c("line","smooth"),  method ="lm")
+
+ *Converting dates into weekends and weekdays*
+ ##Activity patterns on weekends and weekdays
+
+*Converting dates into weekends and weekdays*
+
+ ```{r, echo=TRUE}
+ mydates <- as.Date(df1$date)
+ mydadates1 <-weekdays(mydates)
+    ```
+*creating 'differentiators', the two levels and labels*
+    
+ ```{r, echo=TRUE}
+ mydates2<- c("Monday", "Tuesday", "Wednesday", "Thursday","Friday")
+    
+ mydates3 <- factor((weekdays(mydates) %in% mydates2), 
+ levels=c(FALSE, TRUE), labels = c("Weekend",  "weekday"))
+    ```
+  *Creation of dataframe with a new factor variable*
+    
+  ```{r, echo = TRUE}
+  df3<-data.frame(df1, mydates3)
+  names(df3)<- c("steps",  "date",  "interval",   
+ "day_week")
+ ```
+*Creating subsets of weekend days and weekday days*
+    
+```{r, echo= TRUE}
+(stapp_1 <- df3[df3$day_week == "weekend", ])
+    
+(stapp_2 <- df3[df$day_week == "weekday", ])
+    ```
+
+
+# Plot intervals by weekends and weekdays
+
+```{r, fig.width=7, fig.height=5, echo=TRUE}
+par(mfrow = c (2,2))
+library(ggplot2)
+par(mfrow =  c(2,2))
+library(ggplot2)
+qplot(interval, steps, data = stapp_1, main = "steps on weekends", geom =   
+c("line", "smooth"),   color = "wheat",  xlab ="interval", ylab 
+ ="steps on weekends", method = "lm")
+qplot(interval,steps, data = stapp_2, main = "weekdays", geom =   
+c("line", "smooth"), color= "red", ylab ="steps on weekdays", method = "lm")
+
+##*Conclusion*
+*There is apparently a marked difference in the pattern of activity on weekdays and weekends. On weekdays actvity is very intensive  
+during early mmorning, peaks somewhat quickly and starts to fall  off, albeit with intermitent spurts along the way. For the weekends 
+activity seems intense during later hours. It is also important to    note that the concentration of pockets of time of intense activity
+seems to occur more in batches with respect to weekends than on   weekdays. Another important difference between the two categories 
+lies in the high concentration of activity (more compact) compared   with somewhat slightly paced activity on weekends.
+On weekdays and weekends. On weekdays actvity is very intensive during early morning, peaks somewhat quickly and starts to fall
+off, albeit with intermitent spurts along the way. For the weekends   activity seems intense during later hours. It is also important to 
+note that the concentration of pockets of time of intense activity  seems to occur more in batches with respect to weekends than on  
+weekdays. Another important difference between the two categories  lies in the high concentration of activity (more compact) compared 
+with somewhat slightly paced activity on weekends.*
+    
+    
